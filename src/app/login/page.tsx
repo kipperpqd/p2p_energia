@@ -9,34 +9,80 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const router = useRouter()
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    setError('')
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      console.log('🔐 Tentando fazer login...')
+      
+      // 1. Fazer login
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
+      if (authError) {
+        console.error('❌ Erro de autenticação:', authError)
+        throw new Error(`Erro de autenticação: ${authError.message}`)
+      }
 
-      // Verificar tipo de perfil
-      const { data: perfil } = await supabase
+      if (!authData?.user) {
+        throw new Error('Usuário não encontrado após login')
+      }
+
+      console.log('✅ Login bem-sucedido. User ID:', authData.user.id)
+
+      // 2. Buscar perfil
+      console.log('🔍 Buscando perfil do usuário...')
+      
+      const { data: perfil, error: perfilError } = await supabase
         .from('perfis')
-        .select('tipo_perfil')
-        .eq('id_perfil', data.user.id)
+        .select('tipo_perfil, id_cliente')
+        .eq('id_perfil', authData.user.id)
         .single()
 
+      if (perfilError) {
+        console.error('❌ Erro ao buscar perfil:', perfilError)
+        
+        // Se não encontrou perfil, criar um padrão
+        if (perfilError.code === 'PGRST116') {
+          console.log('⚠️ Perfil não encontrado. Criando perfil padrão...')
+          
+          const { error: insertError } = await supabase
+            .from('perfis')
+            .insert([{ id_perfil: authData.user.id, tipo_perfil: 'cliente' }])
+          
+          if (insertError) {
+            throw new Error(`Erro ao criar perfil: ${insertError.message}`)
+          }
+          
+          // Redirecionar para área do cliente
+          router.push('/cliente/dashboard')
+          return
+        }
+        
+        throw new Error(`Erro ao buscar perfil: ${perfilError.message}`)
+      }
+
+      console.log('✅ Perfil encontrado:', perfil)
+
+      // 3. Redirecionar baseado no tipo de perfil
       if (perfil?.tipo_perfil === 'admin') {
+        console.log('🎯 Redirecionando para admin...')
         router.push('/admin/dashboard')
       } else {
+        console.log('🎯 Redirecionando para cliente...')
         router.push('/cliente/dashboard')
       }
+
     } catch (error: any) {
-      alert('Erro ao fazer login: ' + error.message)
+      console.error('❌ Erro geral:', error)
+      setError(error.message || 'Erro desconhecido ao fazer login')
     } finally {
       setLoading(false)
     }
@@ -57,6 +103,13 @@ export default function Login() {
         {/* Formulário de Login */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Entrar na Plataforma</h2>
+          
+          {/* Mostrar erro se houver */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          )}
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
