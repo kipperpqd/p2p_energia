@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabases.gp2p.cloud'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.gp2p.cloud'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc2MzUwNjc0MCwiZXhwIjo0OTE5MTgwMzQwLCJyb2xlIjoiYW5vbiJ9.tGlxvR6U5Oswot3PlIkL_jQd0O_Vt8dhKcg85kJyo'
 
 // Debug
@@ -66,6 +66,7 @@ export type Boleto = {
   data_pagamento: string
   pago_em?: string
 }
+
 
 
 
