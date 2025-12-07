@@ -96,7 +96,7 @@ export default function Login() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mb-4">
             <Zap className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Energia GP2P</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">P2P Energia</h1>
           <p className="text-gray-600">Sistema de Gestão de Faturas</p>
         </div>
 
@@ -157,9 +157,10 @@ export default function Login() {
         </div>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          © 2024 GP2P Cloud. Todos os direitos reservados.
+          © 2025 P2P Cloud. Todos os direitos reservados.
         </p>
       </div>
     </div>
   )
 }
+
