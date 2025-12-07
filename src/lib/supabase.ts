@@ -21,6 +21,7 @@ export type Cliente = {
   cpf_cnpj: string
   email: string
   telefone?: string
+  nr_cliente: string
   data_nascimento?: string
   created_at: string
 }
@@ -59,4 +60,5 @@ export type Boleto = {
   data_pagamento: string
   pago_em?: string
 }
+
 
