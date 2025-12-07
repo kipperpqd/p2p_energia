@@ -3,8 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
+// ADICIONAR OPÇÕES DE CONFIGURAÇÃO
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  },
+  db: {
+    schema: 'public'  // IMPORTANTE: especificar o schema
+  }
+})
 // Tipos do banco de dados
 export type Cliente = {
   id_cliente: string
@@ -50,3 +59,4 @@ export type Boleto = {
   data_pagamento: string
   pago_em?: string
 }
+
