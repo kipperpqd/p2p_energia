@@ -1,13 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.gp2p.cloud'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc2MzUwNjc0MCwiZXhwIjo0OTE5MTgwMzQwLCJyb2xlIjoiYW5vbiJ9.tGlxvR6U5Oswot3PlIkL_jQd0O_Vt8dhKcg85kJyo'
+const supabaseUrl = 'https://supabase.gp2p.cloud'
+const supabaseAnonKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc2MzUwNjc0MCwiZXhwIjo0OTE5MTgwMzQwLCJyb2xlIjoiYW5vbiJ9.tGlxvR6U5Oswot3PlIkL_jQd0O_Vt8dhKcg85kJyo'
+
 
 // Debug
 if (typeof window !== 'undefined') {
-  console.log('🔧 Supabase URL:', supabaseUrl)
+  console.log('🔧 Supabase URL (hardcoded):', supabaseUrl)
   console.log('🔧 Supabase Key existe?', supabaseAnonKey ? 'Sim ✅' : 'Não ❌')
   console.log('🔧 Supabase Key length:', supabaseAnonKey.length)
+  console.log('🔧 ENV URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+  console.log('🔧 ENV KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Existe' : 'Não existe')
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
@@ -15,11 +18,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true
-  },
-  db: {
-    schema: 'public'
   }
 })
+
+// ... resto dos tipos
 // Tipos do banco de dados
 export type Cliente = {
   id_cliente: string
@@ -66,6 +68,7 @@ export type Boleto = {
   data_pagamento: string
   pago_em?: string
 }
+
 
 
 
