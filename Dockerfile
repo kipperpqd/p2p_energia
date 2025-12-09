@@ -8,19 +8,20 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies (use npm install instead of npm ci)
-RUN npm install --legacy-peer-deps
+# Install dependencies with timeout
+RUN npm install --legacy-peer-deps --loglevel verbose || \
+    npm install --legacy-peer-deps --prefer-offline --no-audit
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set environment variables for build
+# Build application
 ENV NEXT_TELEMETRY_DISABLED=1
-
-# Build the application
 RUN npm run build
 
 # Production image, copy all the files and run next
