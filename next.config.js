@@ -4,8 +4,9 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.supabase.co',
+        hostname: '**.gp2p.cloud',
       },
     ],
   },
 }
+
